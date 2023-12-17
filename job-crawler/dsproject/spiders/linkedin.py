@@ -19,7 +19,9 @@ location = [
 
 class LinkedJobsSpider(scrapy.Spider):
     name = "linkedin"
-    api_url = 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?location=Haiphong%2C%20Hai%20Phong%20City%2C%20Vietnam&geoId=102884955&trk=public_jobs_jobs-search-bar_search-submit&start='
+    api_url = 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/' \
+              'search?location=Haiphong%2C%20Hai%20Phong%20City%2C%20Vietnam&geoId=102884955' \
+              '&trk=public_jobs_jobs-search-bar_search-submit&start='
 
     # start_urls = [self.api_url.format(loc) for loc in location]
     # start_urls = [api_url.format(location[0])]
