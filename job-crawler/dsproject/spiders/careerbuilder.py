@@ -1,10 +1,17 @@
 import scrapy
-import requests
+import json
+from kafka import KafkaProducer
 
 
 class CareerbuilderSpider(scrapy.Spider):
     name = "careerbuilder"
     api_url = 'https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-{}-vi.html'
+
+    # Kafka
+    producer = KafkaProducer(
+        bootstrap_servers=['localhost:9092'],
+        value_serializer=lambda v: json.dumps(v).encode('utf-8')
+    )
 
     def start_requests(self):
         initPage = 1
@@ -34,10 +41,11 @@ class CareerbuilderSpider(scrapy.Spider):
                 yield scrapy.Request(url=joblink, callback=self.parse_job_detail, meta={'jobitem': job_item})
 
         pageNum = response.meta['pageNum']
-        pageNum = pageNum + 1
-        next_page = self.api_url.format(pageNum)
-        if next_page:
-            yield scrapy.Request(url=next_page, callback=self.parse_job, meta={'pageNum': pageNum})
+        if pageNum < 8000:
+            pageNum = pageNum + 1
+            next_page = self.api_url.format(pageNum)
+            if next_page:
+                yield scrapy.Request(url=next_page, callback=self.parse_job, meta={'pageNum': pageNum})
 
     def parse_job_detail(self, response):
         jobitem = response.meta['jobitem']
@@ -64,4 +72,11 @@ class CareerbuilderSpider(scrapy.Spider):
         job_requirements = requirements_div.xpath('.//p/text()').extract()
         jobitem['requirements'] = ', '.join([requirements.strip() for requirements in job_requirements])
 
+        # kafka
+        self.producer.send('careerbuilder', value=jobitem)  # change to your topic
+
         yield jobitem
+
+    def closed(self, reason):
+        # Close the Kafka producer when the spider is closed
+        self.producer.close()

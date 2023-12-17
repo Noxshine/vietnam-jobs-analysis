@@ -1,11 +1,18 @@
 import scrapy
 import re
+import json
+from kafka import KafkaProducer
 
 
 class CareerlinkSpider(scrapy.Spider):
     name = "careerlink"
 
     api_url = 'https://www.careerlink.vn/vieclam/list?page={}'
+
+    producer = KafkaProducer(
+        bootstrap_servers=['localhost:9092'],  # change to actual Kafka bootstrap servers and topic.
+        value_serializer=lambda v: json.dumps(v).encode('utf-8')
+    )
 
     def start_requests(self):
         pages = []
@@ -103,4 +110,10 @@ class CareerlinkSpider(scrapy.Spider):
         skillText = response.css('#section-job-skills div.raw-content.rich-text-content p::text').getall()
         job_item['skill'] = ', '.join([skill.strip() for skill in skillText if skill.strip()])
 
+        self.producer.send('careerlink', value=job_item)  # change to your topic
+
         yield job_item
+
+    def closed(self, reason):
+        # Close the Kafka producer when the spider is closed
+        self.producer.close()
