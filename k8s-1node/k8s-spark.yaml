@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: spark
+spec:
+  containers:
+    - name: spark
+      image: your_spark_app_image
+      env:
+        - name: SPARK_MODE
+          value: master
+        - name: SPARK_RPC_AUTHENTICATION_ENABLED
+          value: no
+        # ... other Spark environment variables ...
+      ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: spark-worker
+spec:
+  containers:
+    - name: spark-worker
+      image: your_spark_app_image
+      env:
+        - name: SPARK_MODE
+          value: worker
+        - name: SPARK_MASTER_URL
+          value: spark://spark:7077
+        - name: SPARK_WORKER_MEMORY
+          value: 1G
+        - name: SPARK_WORKER_CORES
+          value: "1"
+        # ... other Spark environment variables ...
