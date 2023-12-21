@@ -12,6 +12,8 @@ def modify_company_name(x: str):
     x = x.replace("Công Ty", "Cty")
     x = x.replace("Tnhh", "TNHH")
     x = x.replace("Cổ Phần", "CP")
+    x = x.replace("Cp", "CP")
+
     x = x.strip()
 
     return x

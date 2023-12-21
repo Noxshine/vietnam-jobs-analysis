@@ -3,7 +3,7 @@ import pyspark.sql.types as T
 
 
 @F.udf(returnType=T.StringType())
-def extract_job_address(x: str):
+def modify_job_address(x: str):
     if 'Hà Nội' in x:
         return 'HaNoi'
     if 'Hồ Chí Minh' in x:

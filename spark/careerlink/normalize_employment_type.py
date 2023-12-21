@@ -5,12 +5,12 @@ import pyspark.sql.types as T
 @F.udf(returnType=T.StringType())
 def normalize_employment_type(employment_type: str):
     if employment_type is None:
-        return "full time"
+        return "full-time"
     if "bán thời gian" in employment_type:
-        return "part time"
+        return "part-time"
     elif "hợp đồng" in employment_type:
         return "contract"
-    return "full time"
+    return "full-time"
 
 
 @F.udf(returnType=T.BooleanType())
