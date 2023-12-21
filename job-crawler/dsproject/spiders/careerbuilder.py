@@ -29,8 +29,8 @@ class CareerbuilderSpider(scrapy.Spider):
             job_item['job_title'] = job.css("h2 a::text").get(default='not-found').strip()
             # job_item['job_detail_url'] = job.css(".base-card__full-link::attr(href)").get(default='not-found').strip()
             job_item['job_listed'] = job.css('div.time time::text').get(default='not-found').strip()
-            job_item['salary'] = job.css('div.salary p::text').get(default='not-found').strip()
             job_item['job_deadline'] = job.css('div.expire-date p::text').get(default='not-found').strip()
+            job_item['salary'] = job.css('div.salary p::text').get(default='not-found').strip()
             job_item['company_name'] = job.css('a.company-name::text').get(default='not-found').strip()
 
             job_item['job_address'] = job.css('div.location li::text').get(default='not-found').strip()
@@ -55,6 +55,7 @@ class CareerbuilderSpider(scrapy.Spider):
 
         jobitem['job_experience_required'] = jobDetail1.css('div.detail-box li:contains("Kinh nghiệm") p::text').get(
             default='not-found').strip()
+        jobitem['job_experience_required'] = jobitem['job_experience_required'].replace('\r\n', '')
 
         jobitem['employment_type'] = jobDetail1.css('div.detail-box li:contains("Hình thức") p::text').get(
             default='not-found').strip()
@@ -71,6 +72,8 @@ class CareerbuilderSpider(scrapy.Spider):
         description_div = response.xpath('//div[@class="detail-row reset-bullet"]')
         job_description = description_div.xpath('.//p/text()').extract()
         jobitem['job_description'] = ', '.join([description.strip() for description in job_description])
+        jobitem['job_description'] = jobitem['job_description'].replace('•', '')
+        jobitem['job_description'] = jobitem['job_description'].replace('-', '')
 
         requirements_div = response.xpath('//div[@class="detail-row" and @reset-bullet=""]')
         job_requirements = requirements_div.xpath('.//p/text()').extract()

@@ -53,16 +53,16 @@ class CareerlinkSpider(scrapy.Spider):
             '#jd-col div.job-detail-header.mt-3 div.job-overview.mt-2 div.date-from.d-flex.align-items-center span').get()
         job_item['job_listed'] = re.search(r'\b(\d{1,2}-\d{1,2}-\d{4})\b', raw_listed).group(1)
 
-        job_item['salary'] = response.css(
-            '#jd-col div div.card.border-0.font-nunitosans.px-4 div.job-detail-header.mt-3 div.job-overview.mt-2 '
-            'span.text-primary::text').get(
-            default='not-found').strip()
-
         job_item['job_deadline'] = response.css(
             '#jd-col div.card.border-0.font-nunitosans.px-4 div.job-detail-header.mt-3 div.job-overview.mt-2 '
             'div.day-expired.d-flex.align-items-center span b::text').get(
             default='not-found').strip()
         job_item['job_deadline'] = job_item['job_deadline'].replace('\n', ' ')
+
+        job_item['salary'] = response.css(
+            '#jd-col div div.card.border-0.font-nunitosans.px-4 div.job-detail-header.mt-3 div.job-overview.mt-2 '
+            'span.text-primary::text').get(
+            default='not-found').strip()
 
         job_item['company_name'] = response.css(
             '#jd-col > div > div.card.border-0.font-nunitosans.px-4 > div.job-detail-header.mt-3 > div.media.row.m-0 '
