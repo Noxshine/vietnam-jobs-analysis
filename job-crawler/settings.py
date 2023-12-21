@@ -7,10 +7,10 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "dsproject"
+BOT_NAME = "job-crawler"
 
-SPIDER_MODULES = ["dsproject.spiders"]
-NEWSPIDER_MODULE = "dsproject.spiders"
+SPIDER_MODULES = ["job-crawler.spiders"]
+NEWSPIDER_MODULE = "job-crawler.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
