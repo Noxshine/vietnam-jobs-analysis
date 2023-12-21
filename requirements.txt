@@ -1,5 +1,5 @@
-scrapy~=2.11.0
+pyspark~=3.5.0
+Scrapy~=2.11.0
 requests~=2.31.0
-bs4~=0.0.1
 beautifulsoup4~=4.12.2
 itemadapter~=0.8.0

@@ -1,3 +1,5 @@
+import os
+import sys
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
@@ -16,13 +18,17 @@ from spark.careerbuilder.normalize_job_function import normalize_job_function
 KAFKA_SERVER = "localhost:9092"
 KAFKA_TOPIC = "careerbuilder"
 
+MONGO_URI = "mongodb://localhost:27017/"
+MONGO_DB_NAME = "job-analysis"
+MONGO_COLLECTION_NAME = "careerbuilder"
+
 
 def transform_and_ingest():
-    spark = SparkSession.builder \
-        .appName("careerbuilder") \
-        .config("spark.mongodb.input.uri", "mongodb://localhost:27017/hoangph34.careerbuilder") \
-        .config("spark.mongodb.output.uri", "mongodb://localhost:27017/hoangph34.careerbuilder") \
-        .getOrCreate()
+    # spark = SparkSession.builder \
+    #     .appName("careerbuilder") \
+    #     .config("spark.mongodb.input.uri", "mongodb://localhost:27017/hoangph34.careerbuilder") \
+    #     .config("spark.mongodb.output.uri", "mongodb://localhost:27017/hoangph34.careerbuilder") \
+    #     .getOrCreate()
     #
     # job_df = spark \
     #     .readStream \
@@ -31,7 +37,7 @@ def transform_and_ingest():
     #     .option("subscribe", KAFKA_TOPIC) \
     #     .load()
 
-    # spark = SparkSession.builder.appName("example").getOrCreate()
+    spark = SparkSession.builder.appName("example").getOrCreate()
     job_df = spark.read.format("json").option("header", "true").load("careerbuilder.json")
 
     job_df = job_df.withColumn("job_id", format_job_id(job_df["job_id"]))
@@ -48,31 +54,23 @@ def transform_and_ingest():
     job_df = job_df.withColumn("ingested_at", F.current_date())
     job_df = job_df.withColumn("updated_at", F.current_date())
 
-    query = job_df.writeStream \
-        .outputMode("append") \
-        .foreachBatch(lambda batch_df, batch_id: batch_df.write.format("mongo").mode("append").save()) \
-        .start()
+    job_df.write.format("mongo").mode("append").option("uri", MONGO_URI).option("database", MONGO_DB_NAME).option(
+        "collection", MONGO_COLLECTION_NAME).save()
+
+    # query = job_df.writeStream \
+    #     .outputMode("append") \
+    #     .foreachBatch(lambda batch_df, batch_id: batch_df.write \
+    #                   .format("com.mongodb.spark.sql.DefaultSource") \
+    #                   .mode("append") \
+    #                   .option("uri", "mongodb://localhost:27017/hoangph34.careerbuilder") \
+    #                   .option("database", "hoangph34") \
+    #                   .option("collection", "careerbuilder") \
+    #                   .save()) \
+    #     .start()
 
     # Wait for the streaming to finish
-    query.awaitTermination()
+    # query.awaitTermination()
 
 
 if __name__ == "__main__":
     transform_and_ingest()
-
-    # if DeltaTable.isDeltaTable(spark, ingest_table):
-    #     deltaTable = DeltaTable.forPath(spark, ingest_table)
-    #     deltaTable, job_df = merge_schema(spark, deltaTable, job_df)
-    #     delta_df = deltaTable.toDF()
-    #     cols = {}
-    #     for col in job_df.columns:
-    #         if col == "ingested_at":
-    #             continue
-    #         cols[col] = F.when(job_df[col].isNotNull(), job_df[col]).otherwise(delta_df[col])
-    #     deltaTable.alias("ingestion_table").merge(
-    #         job_df.alias("daily_table"),
-    #         "ingestion_table.job_id = daily_table.job_id"
-    #     ).whenMatchedUpdate(set=cols).whenNotMatchedInsertAll()
-    #
-    # else:
-    #     job_df.write.format("delta").save(ingest_table)
