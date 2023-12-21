@@ -1,0 +1,11 @@
+# spark-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spark-config
+data:
+  spark-defaults.conf: |
+    spark.master            k8s://https://kubernetes.default.svc:443
+    spark.submit.deployMode cluster
+    spark.executor.instances 2
+    spark.kubernetes.container.image docker.io/bitnami/spark:3.5

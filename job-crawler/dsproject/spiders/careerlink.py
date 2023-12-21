@@ -41,7 +41,7 @@ class CareerlinkSpider(scrapy.Spider):
         # header-job-info > h1 > a
         # header-job-info > h1 > a
         url_parts = response.url.split('/')
-        job_item['post_id'] = url_parts[-1].split('?')[0]
+        job_item['job_id'] = url_parts[-1].split('?')[0]
         job_item['job_title'] = response.css(
             '#jd-col > div > div.card.border-0.font-nunitosans.px-4 > div.job-detail-header.mt-3 > div.media.row.m-0 '
             '> div.media-body.job-title-and-org-name > div > h1::text').get(
@@ -74,7 +74,7 @@ class CareerlinkSpider(scrapy.Spider):
         job_item['job_address'] = ', '.join(
             [location.strip().replace('\n', ' ') for location in locationText if location.strip()])
 
-        job_item['job_experience_requied'] = response.css(
+        job_item['job_experience_required'] = response.css(
             '#jd-col > div > div.card.border-0.font-nunitosans.px-4 > div.job-detail-header.mt-3 > '
             'div.job-overview.mt-2 > div:nth-child(3) > span::text').get(
             default='not-found').strip()
@@ -101,7 +101,7 @@ class CareerlinkSpider(scrapy.Spider):
 
         industriesText = response.css(
             '#section-job-summary div.row.job-summary.d-flex div.col-6.pl-1.pr-3.pl-md-2 div a span::text').getall()
-        job_item['Industries'] = ', '.join([industry.strip() for industry in industriesText if industry.strip()])
+        job_item['industries'] = ', '.join([industry.strip() for industry in industriesText if industry.strip()])
 
         descriptionText = response.css('#section-job-description p::text').getall()
         job_item['job_description'] = ', '.join(

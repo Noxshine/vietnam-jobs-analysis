@@ -1,0 +1,26 @@
+# spark-master-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: spark-master
+  template:
+    metadata:
+      labels:
+        component: spark-master
+    spec:
+      containers:
+      - name: spark-master
+        image: docker.io/bitnami/spark:3.5
+        command: [ "/bin/bash", "-c", "/opt/spark/bin/spark-class org.apache.spark.deploy.master.Master" ]
+        ports:
+        - containerPort: 7077
+        env:
+        - name: SPARK_MASTER_PORT
+          value: "7077"
+        - name: SPARK_MASTER_WEBUI_PORT
+          value: "7777"

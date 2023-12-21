@@ -1,4 +1,3 @@
-import typer
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
@@ -13,20 +12,24 @@ from spark.careerlink.normalize_employment_type import normalize_employment_type
 from spark.careerlink.normalize_industries_Hoang_fix import normalize_industries
 from spark.careerlink.normalize_job_function import normalize_job_function
 
-app = typer.Typer()
+KAFKA_SERVER = "localhost:9092"
+KAFKA_TOPIC = "careerbuilder"
 
 
-@app.command()
-def transform_and_ingest(
-    daily_table: str,
-    ingest_table: str
-):
-    builder = SparkSession.builder \
-        .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
-        .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
+def transform_and_ingest():
+    spark = SparkSession.builder \
+        .appName("careerbuilder") \
+        .config("spark.mongodb.input.uri", "mongodb://localhost:27017/hoangph34.careerbuilder") \
+        .config("spark.mongodb.output.uri", "mongodb://localhost:27017/hoangph34.careerbuilder") \
+        .getOrCreate()
 
-    spark = configure_spark_with_delta_pip(builder).getOrCreate()
-    job_df = spark.read.csv(daily_table, header=True)
+    job_df = spark \
+        .readStream \
+        .format("kafka") \
+        .option("kafka.bootstrap.servers", KAFKA_SERVER) \
+        .option("subscribe", KAFKA_TOPIC) \
+        .load()
+
     job_df = job_df.withColumn("company_name", modify_company_name(job_df["company_name"]))
     job_df = job_df.withColumn("job_title", modify_job_title(job_df["job_title"]))
     job_df = job_df.withColumn("job_listed", convert_to_job_listed_datetime(job_df["job_listed"]))
@@ -40,23 +43,14 @@ def transform_and_ingest(
     job_df = job_df.withColumn("ingested_at", F.current_date())
     job_df = job_df.withColumn("updated_at", F.current_date())
 
-    if DeltaTable.isDeltaTable(spark, ingest_table):
-        deltaTable = DeltaTable.forPath(spark, ingest_table)
-        deltaTable, job_df = merge_schema(spark, deltaTable, job_df)
-        delta_df = deltaTable.toDF()
-        cols = {}
-        for col in job_df.columns:
-            if col == "ingested_at":
-                continue
-            cols[col] = F.when(job_df[col].isNotNull(), job_df[col]).otherwise(delta_df[col])
-        deltaTable.alias("ingestion_table").merge(
-            job_df.alias("daily_table"),
-            'ingestion_table.post_id = daily_table.post_id'
-        ).whenMatchedUpdate(set=cols).whenNotMatchedInsertAll().execute()
-        
-    else:
-        job_df.write.format("delta").save(ingest_table)
+    query = job_df.writeStream \
+        .outputMode("append") \
+        .foreachBatch(lambda batch_df, batch_id: batch_df.write.format("mongo").mode("append").save()) \
+        .start()
+
+    # Wait for the streaming to finish
+    query.awaitTermination()
 
 
 if __name__ == "__main__":
-    app()
+    transform_and_ingest()

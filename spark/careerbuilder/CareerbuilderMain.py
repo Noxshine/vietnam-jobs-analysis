@@ -11,8 +11,8 @@ from spark.careerbuilder.modify_salary import extract_min_max_salary
 from spark.careerbuilder.normalize_industries import normalize_industries
 from spark.careerlink.normalize_job_function import normalize_job_function
 
-kafka_bootstrap_servers = "localhost:9092"
-kafka_topic = "careerbuilder"
+KAFKA_SERVER = "localhost:9092"
+KAFKA_TOPIC = "careerbuilder"
 
 
 def transform_and_ingest():
@@ -21,13 +21,16 @@ def transform_and_ingest():
         .config("spark.mongodb.input.uri", "mongodb://localhost:27017/hoangph34.careerbuilder") \
         .config("spark.mongodb.output.uri", "mongodb://localhost:27017/hoangph34.careerbuilder") \
         .getOrCreate()
+    #
+    # job_df = spark \
+    #     .readStream \
+    #     .format("kafka") \
+    #     .option("kafka.bootstrap.servers", KAFKA_SERVER) \
+    #     .option("subscribe", KAFKA_TOPIC) \
+    #     .load()
 
-    job_df = spark \
-        .readStream \
-        .format("kafka") \
-        .option("kafka.bootstrap.servers", kafka_bootstrap_servers) \
-        .option("subscribe", kafka_topic) \
-        .load()
+    # spark = SparkSession.builder.appName("example").getOrCreate()
+    job_df = spark.read.format("json").option("header", "true").load("careerbuilder.json")
 
     job_df = job_df.withColumn("company_name", modify_company_name(job_df["company_name"]))
     job_df = job_df.withColumn("job_title", modify_job_title(job_df["job_title"]))
@@ -50,6 +53,9 @@ def transform_and_ingest():
     query.awaitTermination()
 
 
+if __name__ == "__main__":
+    transform_and_ingest()
+
     # if DeltaTable.isDeltaTable(spark, ingest_table):
     #     deltaTable = DeltaTable.forPath(spark, ingest_table)
     #     deltaTable, job_df = merge_schema(spark, deltaTable, job_df)
@@ -66,7 +72,3 @@ def transform_and_ingest():
     #
     # else:
     #     job_df.write.format("delta").save(ingest_table)
-
-
-if __name__ == "__main__":
-    transform_and_ingest()
