@@ -5,15 +5,18 @@ import re
 
 @F.udf(returnType=T.StringType())
 def modify_company_name(x: str):
-    x = re.sub(r'\[.*?\]', '', x)
-    x = re.sub(r'\(.*?\)', '', x)
-    x = x.title()
+    try:
+        x = re.sub(r'\[.*?\]', '', x)
+        x = re.sub(r'\(.*?\)', '', x)
+        x = x.title()
 
-    x = x.replace("Công Ty", "Cty")
-    x = x.replace("Tnhh", "TNHH")
-    x = x.replace("Cổ Phần", "CP")
-    x = x.replace("Cp", "CP")
+        x = x.replace("Công Ty", "Cty")
+        x = x.replace("Tnhh", "TNHH")
+        x = x.replace("Cổ Phần", "CP")
+        x = x.replace("Cp", "CP")
 
-    x = x.strip()
+        x = x.strip()
 
-    return x
+        return x
+    except ValueError:
+        return "None"

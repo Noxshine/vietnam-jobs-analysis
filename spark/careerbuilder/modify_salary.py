@@ -5,22 +5,22 @@ from pyspark.sql import DataFrame
 
 @F.udf(
     returnType=T.StructType([
-        T.StructField("min", T.IntegerType(), nullable=True),
-        T.StructField("max", T.IntegerType(), nullable=True)
+        T.StructField("min", T.StringType(), nullable=True),
+        T.StructField("max", T.StringType(), nullable=True)
     ])
 )
 def get_min_max_salary(salary_string: str):
     if "not-found" in salary_string:
-        return {"min": None, "max": None}
+        return {"min": "None", "max": "None"}
 
-    salary_string = salary_string[7:0]
+    salary_string = salary_string[7:]
 
     salary_string = salary_string.strip().replace(",", ".")
     if "Trên" in salary_string:
         min_salary = float(salary_string.split(" ")[1])
         unit = salary_string.split(" ")[-1]
         min_salary = int(min_salary * 1000000)
-        return {"min": min_salary, "max": None}
+        return {"min": str(min_salary), "max": "None"}
 
     elif "-" in salary_string:
         min_max_salary = salary_string.split(" - ")
@@ -28,9 +28,9 @@ def get_min_max_salary(salary_string: str):
         max_salary = float(min_max_salary[1].split(" ")[0])
         min_salary = int(min_salary * 1000000)
         max_salary = int(max_salary * 1000000)
-        return {"min": min_salary, "max": max_salary}
+        return {"min": str(min_salary), "max": str(max_salary)}
 
-    return {"min": None, "max": None}
+    return {"min": "None", "max": "None"}
 
 
 def extract_min_max_salary(

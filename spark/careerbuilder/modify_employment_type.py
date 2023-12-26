@@ -14,8 +14,8 @@ def normalize_employment_type(employment_type: str):
         return "season"
 
 
-@F.udf(returnType=T.BooleanType())
-def is_temporory_job(employment_type: str):
-    if "Thời vụ" in employment_type:
-        return True
-    return False
+# @F.udf(returnType=T.BooleanType())
+# def is_temporory_job(employment_type: str):
+#     if "Thời vụ" in employment_type:
+#         return True
+#     return False

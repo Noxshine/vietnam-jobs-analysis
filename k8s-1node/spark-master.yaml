@@ -6,13 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: spark
-      role: master
+      component: spark-master
   template:
     metadata:
       labels:
-        app: spark
-        role: master
+        component: spark-master
     spec:
       containers:
       - name: spark-master
@@ -21,27 +19,27 @@ spec:
         - "/opt/bitnami/spark/bin/spark-class"
         - "org.apache.spark.deploy.master.Master"
         ports:
-        - containerPort: 7077
+          - containerPort: 7077
+          - containerPort: 7777
         env:
-        - name: SPARK_MASTER_PORT
-          value: "7077"
-        - name: SPARK_MASTER_WEBUI_PORT
-          value: "7777"
+          - name: SPARK_MASTER_PORT
+            value: "7077"
+          - name: SPARK_MASTER_WEBUI_PORT
+            value: "7777"
+
 ---
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
   name: spark-master
 spec:
-  selector:
-    app: spark
-    role: master
   type: NodePort
   ports:
-    - name : spark
-      protocol: TCP
-      port: 7077
-      targetPort: 7077
-    - name : webui
+    - name: webui
       port: 7777
       targetPort: 7777
+    - name: spark
+      port: 7077
+      targetPort: 7077
+  selector:
+    component: spark-master

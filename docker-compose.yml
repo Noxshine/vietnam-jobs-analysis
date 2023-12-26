@@ -4,17 +4,56 @@ services:
   zookeeper:
     image: wurstmeister/zookeeper
     container_name: zookeeper
+    hostname: zookeeper
     ports:
       - "2181:2181"
+#    networks:
+#      - spark-network
+
   kafka:
     image: wurstmeister/kafka
     container_name: kafka
+    hostname: kafka
     ports:
       - "9092:9092"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#    networks:
+#      - spark-network
 
+  elasticsearch:
+    container_name: elastic-search
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.16
+    hostname: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - xpack.security.enabled = false
+      - xpack.security.enrollment.enabled = false
+    networks:
+      - spark-network
+    ports:
+      - "9200:9200"
+    volumes:
+      - ../elasticsearch-data:/usr/share/elasticsearch/data
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.17.16
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - spark-network
+    depends_on:
+      - elasticsearch
+
+
+networks:
+  spark-network:
+    driver: bridge
 #  spark:
 #    image: docker.io/bitnami/spark:3.5
 #    environment:

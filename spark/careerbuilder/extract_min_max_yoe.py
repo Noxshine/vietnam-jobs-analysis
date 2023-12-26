@@ -5,24 +5,24 @@ from pyspark.sql import DataFrame
 
 @F.udf(
     returnType=T.StructType([
-        T.StructField("min", T.IntegerType(), nullable=True),
-        T.StructField("max", T.IntegerType(), nullable=True),
+        T.StructField("min", T.StringType(), nullable=True),
+        T.StructField("max", T.StringType(), nullable=True),
     ])
 )
 def get_min_max_yoe(job_experience_required: str):
     if "Trên" in job_experience_required:
         job_experience_required = job_experience_required[6:]
-        return {"min": int(job_experience_required[0]), "max": None}
+        return {"min": job_experience_required[0], "max": "None"}
 
     elif "Lên đến" in job_experience_required:
         job_experience_required = job_experience_required[9:]
-        return {"min": None, "max": int(job_experience_required[0])}
+        return {"min": "None", "max": job_experience_required[0]}
 
     elif "not-found" in job_experience_required:
-        return {"min": None, "max": None}
+        return {"min": "None", "max": "None"}
 
     job_experience_required = job_experience_required[:5]
-    return {"min": int(job_experience_required[0]), "max": int(job_experience_required[4])}
+    return {"min": job_experience_required[0], "max": job_experience_required[4]}
 
 
 def extract_min_max_yoe(
