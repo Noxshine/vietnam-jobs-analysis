@@ -41,7 +41,7 @@ class CareerbuilderSpider(scrapy.Spider):
                 yield scrapy.Request(url=joblink, callback=self.parse_job_detail, meta={'jobitem': job_item})
 
         pageNum = response.meta['pageNum']
-        if pageNum < 50:
+        if pageNum < 2:
             pageNum = pageNum + 1
             next_page = self.api_url.format(pageNum)
             if next_page:

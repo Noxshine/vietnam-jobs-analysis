@@ -1,6 +1,5 @@
 from pyspark.sql.types import StructType, StructField, StringType
 
-
 job_schema = StructType([
     StructField("job_id", StringType(), True),
     StructField("job_title", StringType(), True),
@@ -12,9 +11,10 @@ job_schema = StructType([
     StructField("job_experience_required", StringType(), True),
     StructField("employment_type", StringType(), True),
     StructField("job_function", StringType(), True),
+    StructField("education_level", StringType(), True),
+    StructField("gender", StringType(), True),
     StructField("industries", StringType(), True),
-    StructField("welfare", StringType(), True),
     StructField("job_description", StringType(), True),
-    StructField("job_requirement", StringType(), True),
+    StructField("skill", StringType(), True),
 
 ])

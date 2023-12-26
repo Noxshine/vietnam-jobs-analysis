@@ -4,11 +4,14 @@ import re
 
 
 @F.udf(returnType=T.StringType())
-def modify_job_title(input: str):
-    input = re.sub(r'\[.*?\]', '', input)
-    input = re.sub(r'\(.*?\)', '', input)
-    input = input.title()
-    input = input.strip()
-    return input
+def modify_job_title(x: str):
+    try:
+        x = re.sub(r'\[.*?\]', '', x)
+        x = re.sub(r'\(.*?\)', '', x)
+        x = x.title()
+        x = x.strip()
+        return x
+    except ValueError:
+        return "not-found"
 
 
