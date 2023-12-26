@@ -7,7 +7,6 @@ def normalize_industries(industries: str):
     industry_list = industries.split(', ')
 
     # Advertising and marketing - Quảng cáo và tiếp thị
-    # Aerospace - Hàng không
     # Agriculture - Nông nghiệp
     # Computer and technology - IT
     # Construction - Xây dựng
@@ -18,7 +17,7 @@ def normalize_industries(industries: str):
     # Finance and economic - Tài chính và kinh tế
     # Food and beverage - Thực phẩm và đồ uống
     # Health care - Chăm sóc sức khỏe
-    # Hospitality - Dịch vụ
+    # Hospitality - Khách sạn
     # Manufacturing - Sản xuất
     # Media and news - Truyền thông và tin tức
     # Mining - Khai thác mỏ
@@ -26,117 +25,109 @@ def normalize_industries(industries: str):
     # Telecommunication - Viễn thông
     # Transportation - Vận tải
 
-    if "Bán hàng / Kinh doanh" in industry_list[0] :
-        return "Finance and economic"
-    if "Kiến trúc" in industry_list[0] :
-        return "Construction "
+    # Consulting - Tư vấn
+    # Retail and wholesale - bán lẻ/ bán sỉ
+    # Customer services - dịch vụ khách hàng
+    # Administrative - hành chính
+    # Real estate - bất động sản
+    # Art - nghệ thuật
+    # Foreign trade - ngoại thương
+    # Human resources - nhân lực
+    # Travel and tourism - du lịch 
+    # Insurance - bảo hiểm
+
     if "Tư vấn" in industry_list[0] :
-        return "Hospitality"
+        return "Consulting"
     if "Dịch vụ khách hàng" in industry_list[0] :
-        return "Hospitality"
-    if "Tài chính / Đầu tư" in industry_list[0] :
-        return "Finance and economic"
-    if "Bảo hiểm" in industry_list[0] :
-        return "Hospitality"
-    if "Ngân hàng / Chứng khoán" in industry_list[0] :
-        return "Finance and economic"
-    if "Mới tốt nghiệp / Thực tập" in industry_list[0] :
-        return "Other"
-    if "Bán lẻ / Bán sỉ" in industry_list[0] :
-        return "Finance and economic"
-    if "Giáo dục / Đào tạo / Thư viện" in industry_list[0] :
-        return "Education"
-    if "Kế toán / Kiểm toán" in industry_list[0] :
-        return "Finance and economic"
-    if "Điện / Điện tử" in industry_list[0] :
-        return "Computer and technology"
-    if "Kỹ thuật ứng dụng / Cơ khí" in industry_list[0] :
-        return "Manufacturing"
-    if "Sản xuất / Vận hành sản xuất" in industry_list[0] :
-        return "Manufacturing"
-    if "Thư ký / Hành chánh" in industry_list[0] :
-        return "Other"
-    if "CNTT - Phần mềm" in industry_list[0] :
-        return "Computer and technology"
-    if "Biên phiên dịch / Thông dịch viên" in industry_list[0] :
-        return "Other"
-    if "Tiếp thị" in industry_list[0] :
-        return "Advertising and marketing"
-    if "Quảng cáo / Khuyến mãi / Đối ngoại" in industry_list[0] :
-        return "Advertising and marketing"
+        return "Customer services"
+    if "Bán hàng / Kinh doanh" in industry_list[0] :
+        return "Retail and wholesale"
     if "Dược / Sinh học" in industry_list[0] :
         return "Pharmaceutical"
-    if "Biên phiên dịch (tiếng Nhật)" in industry_list[0] :
-        return "Other"
-    if "Lao động phổ thông" in industry_list[0] :
-        return "Other"
-    if "Hóa chất / Sinh hóa / Thực phẩm" in industry_list[0] :
-        return "Pharmaceutical"
-    if "Quản lý chất lượng (QA / QC)" in industry_list[0] :
+    if "Kế toán / Kiểm toán" in industry_list[0] :
+        return "Finance and economic"
+    if "Quảng cáo / Khuyến mãi / Đối ngoại" in industry_list[0] :
+        return "Advertising and marketing"
+    if "Ngân hàng / Chứng khoán" in industry_list[0] :
+        return "Finance and economic"
+    if "Thư ký / Hành chánh" in [0] :
+        return "Administrative"
+    if "Kỹ thuật ứng dụng / Cơ khí" in industry_list[0] :
         return "Manufacturing"
-    if "Vận chuyển / Giao thông / Kho bãi" in industry_list[0] :
-        return "Transportation "
-    if "Thời trang" in industry_list[0] :
-        return "Fashion "
-    if "Xây dựng" in industry_list[0] :
-        return "Construction"
-    if "Bảo trì / Sửa chữa" in industry_list[0] :
-        return "Manufacturing"
-    if "CNTT - Phần cứng / Mạng" in industry_list[0] :
-        return "Computer and technology"
-    if "Quản lý điều hành" in industry_list[0] :
-        return "Other"
-    if "Nhân sự" in industry_list[0] :
-        return "Other"
-    if "Nhà hàng / Dịch vụ ăn uống" in industry_list[0] :
-        return "Food and beverage"
     if "Chăm sóc sức khỏe / Y tế" in industry_list[0] :
         return "Health care"
-    if "Dệt may / Da giày" in industry_list[0] :
+    if "Nhà hàng / Dịch vụ ăn uống" in industry_list[0] :
+        return "Food and beverage"
+    if "Giáo dục / Đào tạo / Thư viện" in industry_list[0] :
+        return "Education"
+    if "CNTT - Phần mềm" in industry_list[0] :
+        return "Computer and technology"
+    if "Xây dựng" in industry_list[0] :
+        return "Contruction"
+    if "Sản xuất / Vận hành sản xuất" in industry_list[0] :
         return "Manufacturing"
-    if "Báo chí / Biên tập viên / Xuất bản" in industry_list[0] :
-        return "Media and news"
-    if "Xuất nhập khẩu / Ngoại thương" in industry_list[0] :
-        return "Transportation"
     if "Nghệ thuật / Thiết kế / Giải trí" in industry_list[0] :
-        return "Entertainment"
-    if "Điện lạnh / Nhiệt lạnh" in industry_list[0] :
-        return "Energy"
-    if "Vật tư / Thu mua" in industry_list[0] :
+        return "Art"
+    if "Nông nghiệp / Lâm nghiệp" in industry_list[0] :
+        return "Agriculture"
+    if "Điện / Điện tử" in industry_list[0] :
         return "Manufacturing"
+    if "Biên phiên dịch / Thông dịch viên" in industry_list[0] :
+        return "Customer services"
+    if "Xuất nhập khẩu / Ngoại thương" in industry_list[0] :
+        return "Foreign trade"
+    if "Quản lý điều hành" in industry_list[0] :
+        return "Administrative"
+    if "Lao động phổ thông" in industry_list[0] :
+        return "Customer services"
+    if "Vận chuyển / Giao thông / Kho bãi" in industry_list[0] :
+        return "Transportation"
+    if "Nhân sự" in industry_list[0] :
+        return "Human resources"
+    if "Hóa chất / Sinh hóa / Thực phẩm" in industry_list[0] :
+        return "Pharmaceutical"
+    if "Dệt may / Da giày" in industry_list[0] :
+        return "Fashion"
+    if "Khách sạn" in industry_list[0] :
+        return "Hospitality"
+    if "Pháp lý / Luật" in industry_list[0] :
+        return "Customer services"
+    if "Du lịch" in industry_list[0] :
+        return "Travel and tourism"
+    if "Bảo trì / Sửa chữa" in industry_list[0] :
+        return "Customer services"
+    if "Viễn Thông" in industry_list[0] :
+        return "Telecommunication"
+    if "CNTT - Phần cứng / Mạng" in industry_list[0] :
+        return "Computer and technology"
     if "Bất động sản" in industry_list[0] :
+        return "Real estate"
+    if "An Ninh / Bảo Vệ" in industry_list[0] :
+        return "Customer services"
+    if "Bán lẻ / Bán sỉ" in industry_list[0] :
+        return "Retail and wholesale"
+    if "Bảo hiểm" in industry_list[0] :
+        return "Insurance"
+    if "Tài chính / Đầu tư" in industry_list[0] :
+        return "Finance and economic"
+    if "Tiếp thị" in industry_list[0] :
+        return "Consulting"
+    if "Kiến trúc" in industry_list[0] :
         return "Construction"
     if "Nội thất / Ngoại thất" in industry_list[0] :
         return "Manufacturing"
-    if "Pháp lý / Luật" in industry_list[0] :
-        return "Other"
-    if "Viễn Thông" in industry_list[0] :
-        return "Telecommunication"
-    if "Khác" in industry_list[0] :
-        return "Other"
-    if "Môi trường / Xử lý chất thải" in industry_list[0] :
-        return "Other"
-    if "An Toàn Lao Động" in industry_list[0] :
-        return "Other"
-    if "Nông nghiệp / Lâm nghiệp" in industry_list[0] :
-        return "Agriculture"
-    if "Du lịch" in industry_list[0] :
-        return "Hospitality"
-    if "Hàng gia dụng" in industry_list[0] :
-        return "Manufacturing"
     if "Đồ Gỗ" in industry_list[0] :
         return "Manufacturing"
-    if "Khách sạn" in industry_list[0] :
-        return "Hospitality"
-    if "An Ninh / Bảo Vệ" in industry_list[0] :
-        return "Other"
+    if "Thuỷ Hải Sản" in industry_list[0] :
+        return "Agriculture"
     if "Ô tô" in industry_list[0] :
         return "Manufacturing"
     if "Dầu khí / Khoáng sản" in industry_list[0] :
-        return "Mining"
-    if "Thuỷ Hải Sản" in industry_list[0] :
-        return "Agriculture"
-    if "Người nước ngoài" in industry_list[0] :
-        return "Other"
-  
+        return "Energy"
+    if "Thời trang" in industry_list[0] :
+        return "Fashion"
+    if "Điện lạnh / Nhiệt lạnh" in industry_list[0] :
+        return "Manufacturing"
+    if "Hàng gia dụng" in industry_list[0] :
+        return "Manufacturing"
     return "Other"

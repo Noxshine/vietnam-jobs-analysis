@@ -11,7 +11,7 @@ from extract_min_max_yoe import extract_min_max_yoe
 from modify_company_name import modify_company_name
 from modify_job_title import modify_job_title
 from normalize_employment_type import normalize_employment_type
-from normalize_industries_Hoang_fix import normalize_industries
+from normalize_industries import normalize_industries
 from normalize_job_function import normalize_job_function
 
 scala_version = '2.12'
