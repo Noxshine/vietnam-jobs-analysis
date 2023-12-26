@@ -2,53 +2,33 @@ version: '3'
 
 services:
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: bitnami/zookeeper:3.9
     container_name: zookeeper
     hostname: zookeeper
+    restart: always
     ports:
       - "2181:2181"
-#    networks:
-#      - spark-network
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - spark-network
 
   kafka:
-    image: wurstmeister/kafka
+    image: bitnami/kafka:3.5
     container_name: kafka
     hostname: kafka
     ports:
-      - "9092:9092"
+      - "9093:9093"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-#    networks:
-#      - spark-network
-
-  elasticsearch:
-    container_name: elastic-search
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.16
-    hostname: elasticsearch
-    environment:
-      - xpack.security.enabled=false
-      - discovery.type=single-node
-      - xpack.security.enabled = false
-      - xpack.security.enrollment.enabled = false
-    networks:
-      - spark-network
-    ports:
-      - "9200:9200"
-    volumes:
-      - ../elasticsearch-data:/usr/share/elasticsearch/data
-
-  kibana:
-    container_name: kibana
-    image: docker.elastic.co/kibana/kibana:7.17.16
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    ports:
-      - "5601:5601"
-    networks:
-      - spark-network
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9093,INTERNAL://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9093,INTERNAL://:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
     depends_on:
-      - elasticsearch
+      - zookeeper
+    networks:
+      - spark-network
 
 
 networks:
