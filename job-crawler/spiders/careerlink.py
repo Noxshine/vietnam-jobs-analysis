@@ -10,13 +10,13 @@ class CareerlinkSpider(scrapy.Spider):
     api_url = 'https://www.careerlink.vn/vieclam/list?page={}'
 
     producer = KafkaProducer(
-        bootstrap_servers=['localhost:9092'],  # change to actual Kafka bootstrap servers and topic.
+        bootstrap_servers=['localhost:9093'],  # change to actual Kafka bootstrap servers and topic.
         value_serializer=lambda v: json.dumps(v, ensure_ascii=False).encode('utf-8')
     )
 
     def start_requests(self):
         pages = []
-        for i in range(1, 438):
+        for i in range(1, 2):
             domain = self.api_url.format(i)
             yield scrapy.Request(url=domain, callback=self.parse_link)
 

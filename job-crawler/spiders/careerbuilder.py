@@ -9,7 +9,7 @@ class CareerbuilderSpider(scrapy.Spider):
 
     # Kafka
     producer = KafkaProducer(
-        bootstrap_servers=['localhost:9092'],
+        bootstrap_servers=['localhost:9093'],
         value_serializer=lambda v: json.dumps(v, ensure_ascii=False).encode('utf-8')
     )
 
