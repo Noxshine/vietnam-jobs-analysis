@@ -3,7 +3,7 @@ import sys
 
 from pyspark.sql import functions as F
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import from_json
+from pyspark.sql.functions import col, from_json
 
 
 from extract_min_max_yoe import extract_min_max_yoe
@@ -17,7 +17,7 @@ from modify_job_title import modify_job_title
 from modify_salary import extract_min_max_salary
 from normalize_industries import normalize_industries
 from normalize_job_function import normalize_job_function
-from careerbuilder_schema import job_schema
+from schema import job_schema
 
 scala_version = '2.12'
 spark_version = '3.2.3'
@@ -28,15 +28,12 @@ packages = [
     "org.mongodb.spark:mongo-spark-connector_2.12:3.0.2"
 ]
 
-KAFKA_SERVER = "localhost:9092"
+KAFKA_SERVER = "kafka:9092"
 KAFKA_TOPIC = "careerbuilder"
 
 MONGO_URI = "mongodb://localhost:27017/"
 MONGO_DB_NAME = "job-analysis"
 MONGO_COLLECTION_NAME = "careerbuilder"
-
-os.environ['PYSPARK_PYTHON'] = sys.executable
-os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 
 
 def transform_and_ingest():
@@ -65,7 +62,7 @@ def transform_and_ingest():
 
     job_df.printSchema()
 
-    job_df = job_df.withColumn("job_id", format_job_id(job_df["job_id"]))
+    job_df = job_df.withColumn("job_id", format_job_id(col("job_id")))
     job_df = job_df.withColumn("job_title", modify_job_title(job_df["job_title"]))
     job_df = job_df.withColumn("job_listed", convert_to_job_listed_datetime(job_df["job_listed"]))
     job_df = job_df.withColumn("job_deadline", convert_to_job_deadline_datetime(job_df["job_deadline"]))

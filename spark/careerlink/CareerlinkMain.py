@@ -23,7 +23,8 @@ packages = [
     "org.mongodb.spark:mongo-spark-connector_2.12:3.0.2"
 ]
 
-KAFKA_SERVER = "localhost:9092"
+# KAFKA_SERVER = "localhost:9093"
+KAFKA_SERVER = "INTERNAL://172.21.0.3:9092"
 KAFKA_TOPIC = "careerlink"
 
 MONGO_URI = "mongodb://localhost:27017/"
