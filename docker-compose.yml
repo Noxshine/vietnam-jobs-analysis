@@ -30,10 +30,20 @@ services:
     networks:
       - spark-network
 
+  mongo:
+    image: mongo
+    container_name: mymongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+    networks:
+      - spark-network
 
 networks:
   spark-network:
     driver: bridge
+
 #  spark:
 #    image: docker.io/bitnami/spark:3.5
 #    environment:

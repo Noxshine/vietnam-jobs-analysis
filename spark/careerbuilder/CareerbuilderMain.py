@@ -17,7 +17,7 @@ from modify_job_title import modify_job_title
 from modify_salary import extract_min_max_salary
 from normalize_industries import normalize_industries
 from normalize_job_function import normalize_job_function
-from schema import job_schema
+from careerbuilder_schema import job_schema
 
 scala_version = '2.12'
 spark_version = '3.2.3'
@@ -31,7 +31,7 @@ packages = [
 KAFKA_SERVER = "kafka:9092"
 KAFKA_TOPIC = "careerbuilder"
 
-MONGO_URI = "mongodb://localhost:27017/"
+MONGO_URI = "mongodb://mymongodb:27017/"
 MONGO_DB_NAME = "job-analysis"
 MONGO_COLLECTION_NAME = "careerbuilder"
 
@@ -42,8 +42,8 @@ def transform_and_ingest():
         .master("local[*]") \
         .config("spark.jars.packages", ",".join(packages)) \
         .config("spark.executor.heartbeatInterval", "10000ms") \
-        .config("spark.mongodb.input.uri", "mongodb://localhost:27017/job-analysis.careerbuilder") \
-        .config("spark.mongodb.output.uri", "mongodb://localhost:27017/job-analysis.careerbuilder") \
+        .config("spark.mongodb.input.uri", "mongodb://mymongodb:27017/job-analysis.careerbuilder") \
+        .config("spark.mongodb.output.uri", "mongodb://mymongodb:27017/job-analysis.careerbuilder") \
         .config("spark.cores.max", "2") \
         .config("spark.executor.memory", "2g") \
         .getOrCreate()

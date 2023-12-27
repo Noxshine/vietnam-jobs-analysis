@@ -24,10 +24,10 @@ packages = [
 ]
 
 # KAFKA_SERVER = "localhost:9093"
-KAFKA_SERVER = "INTERNAL://172.21.0.3:9092"
+KAFKA_SERVER = "kafka:9092"
 KAFKA_TOPIC = "careerlink"
 
-MONGO_URI = "mongodb://localhost:27017/"
+MONGO_URI = "mongodb://mymongodb:27017/"
 MONGO_DB_NAME = "job-analysis"
 MONGO_COLLECTION_NAME = "careerlink"
 
@@ -38,8 +38,8 @@ def transform_and_ingest():
         .master("local[*]") \
         .config("spark.jars.packages", ",".join(packages)) \
         .config("spark.executor.heartbeatInterval", "10000ms") \
-        .config("spark.mongodb.input.uri", "mongodb://localhost:27017/job-analysis.careerlink") \
-        .config("spark.mongodb.output.uri", "mongodb://localhost:27017/job-analysis.careerlink") \
+        .config("spark.mongodb.input.uri", "mongodb://mymongodb:27017/job-analysis.careerlink") \
+        .config("spark.mongodb.output.uri", "mongodb://mymongodb:27017/job-analysis.careerlink") \
         .config("spark.cores.max", "2") \
         .config("spark.executor.memory", "2g") \
         .getOrCreate()
