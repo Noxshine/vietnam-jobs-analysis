@@ -33,10 +33,12 @@ services:
   mongo:
     image: mongo
     container_name: mymongodb
+    hostname: mymongodb
     ports:
       - "27017:27017"
     volumes:
       - ./data:/data/db
+    command: mongod --bind_ip_all
     networks:
       - spark-network
 

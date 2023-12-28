@@ -10,7 +10,7 @@ class CareerlinkSpider(scrapy.Spider):
     api_url = 'https://www.careerlink.vn/vieclam/list?page={}'
 
     producer = KafkaProducer(
-        bootstrap_servers=['localhost:9093'],  # change to actual Kafka bootstrap servers and topic.
+        bootstrap_servers=['localhost:9093'],
         value_serializer=lambda v: json.dumps(v, ensure_ascii=False).encode('utf-8')
     )
 

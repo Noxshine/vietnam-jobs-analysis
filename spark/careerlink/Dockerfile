@@ -18,9 +18,6 @@ ENV PYSPARK_PYTHON=/usr/local/bin/python
 RUN pip install -r /app/requirements.txt
 RUN apt-get update && apt-get install -y openjdk-17-jdk
 
-# Expose any ports your application needs (if applicable)
-# EXPOSE 8080
-
 # Specify the entry point for your application
 # For example, if your PySpark script is named "main.py", use:
 CMD ["python", "CareerlinkMain.py"]

@@ -19,16 +19,15 @@ from normalize_industries import normalize_industries
 from normalize_job_function import normalize_job_function
 from careerbuilder_schema import job_schema
 
-scala_version = '2.12'
-spark_version = '3.2.3'
-packages = [
-    f'org.apache.spark:spark-sql-kafka-0-10_{scala_version}:{spark_version}',
-    'org.apache.kafka:kafka-clients:3.5.0',
-    'org.elasticsearch:elasticsearch-spark-30_2.12:7.17.16',
-    "org.mongodb.spark:mongo-spark-connector_2.12:3.0.2"
-]
+# scala_version = '2.12'
+# spark_version = '3.2.3'
+# packages = [
+#     f'org.apache.spark:spark-sql-kafka-0-10_{scala_version}:{spark_version}',
+#     'org.apache.kafka:kafka-clients:3.5.0',
+#     "org.mongodb.spark:mongo-spark-connector_2.12:3.0.2"
+# ]
 
-KAFKA_SERVER = "kafka:9092"
+KAFKA_SERVER = "kafka:9093"
 KAFKA_TOPIC = "careerbuilder"
 
 MONGO_URI = "mongodb://mymongodb:27017/"
@@ -39,8 +38,6 @@ MONGO_COLLECTION_NAME = "careerbuilder"
 def transform_and_ingest():
     spark = SparkSession.builder \
         .appName("careerbuilder") \
-        .master("local[*]") \
-        .config("spark.jars.packages", ",".join(packages)) \
         .config("spark.executor.heartbeatInterval", "10000ms") \
         .config("spark.mongodb.input.uri", "mongodb://mymongodb:27017/job-analysis.careerbuilder") \
         .config("spark.mongodb.output.uri", "mongodb://mymongodb:27017/job-analysis.careerbuilder") \
