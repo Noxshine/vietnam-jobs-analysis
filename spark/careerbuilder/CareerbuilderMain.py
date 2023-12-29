@@ -27,10 +27,10 @@ from careerbuilder_schema import job_schema
 #     "org.mongodb.spark:mongo-spark-connector_2.12:3.0.2"
 # ]
 
-KAFKA_SERVER = "kafka:9093"
+KAFKA_SERVER = "192.168.65.0:9093"
 KAFKA_TOPIC = "careerbuilder"
 
-MONGO_URI = "mongodb://mymongodb:27017/"
+MONGO_URI = "mongodb://192.168.65.0:27017/"
 MONGO_DB_NAME = "job-analysis"
 MONGO_COLLECTION_NAME = "careerbuilder"
 
@@ -39,8 +39,8 @@ def transform_and_ingest():
     spark = SparkSession.builder \
         .appName("careerbuilder") \
         .config("spark.executor.heartbeatInterval", "10000ms") \
-        .config("spark.mongodb.input.uri", "mongodb://mymongodb:27017/job-analysis.careerbuilder") \
-        .config("spark.mongodb.output.uri", "mongodb://mymongodb:27017/job-analysis.careerbuilder") \
+        .config("spark.mongodb.input.uri", "mongodb://192.168.65.0:27017/job-analysis.careerbuilder") \
+        .config("spark.mongodb.output.uri", "mongodb://192.168.65.0:27017/job-analysis.careerbuilder") \
         .config("spark.cores.max", "2") \
         .config("spark.executor.memory", "2g") \
         .getOrCreate()

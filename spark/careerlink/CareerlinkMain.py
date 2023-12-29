@@ -23,7 +23,7 @@ spark_version = '3.2.3'
 # ]
 
 # KAFKA_SERVER = "localhost:9093"
-KAFKA_SERVER = "kafka:9093"
+KAFKA_SERVER = "172.20.0.3:9093"
 KAFKA_TOPIC = "careerlink"
 
 MONGO_URI = "mongodb://mymongodb:27017/"
