@@ -2,8 +2,9 @@
 Buid a bigdata storage and processing system for analizing Vietnam job data from recruitment websites Careerlink, Careerbuilder, TopCV,... Data is crawled by [Scrapy](https://scrapy.org/) and processed using [Spark](https://spark.apache.org/). Spark cluster is managed by [Kuberneste](https://kubernetes.io/) inside [Docker](https://www.docker.com/). For testing, we build system in 1 node using Window OS.
 
 ## Pipeline
+![Alt text](image/flow.png)
 
-
+Data crawled from Scrapy is written to a Kafka broker in 2 topic careerlink and careerbuilder. Then spark streaming job subcribe to kafka to read data and make processing. After that, data will be written to mongodb container for further purpose. 
 ## Installation
 - Install all requirements lib.
 ```bash
@@ -11,7 +12,7 @@ pip install -r requirements.txt
 ```
 
 -  Download Docker desktop [Docker desktop](https://www.docker.com/products/docker-desktop/)
-- Install and setup kubectl for Window[Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/)
+- Install and setup kubectl for Window [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/)
 - Install [Helm](https://github.com/helm/helm/releases) - package manager for K8s
 
 ## Setup Kuberneste - Spark cluster
