@@ -22,8 +22,7 @@ spark_version = '3.2.3'
 #     "org.mongodb.spark:mongo-spark-connector_2.12:3.0.2"
 # ]
 
-# KAFKA_SERVER = "localhost:9093"
-KAFKA_SERVER = "172.20.0.3:9093"
+KAFKA_SERVER = "kafka:9092"
 KAFKA_TOPIC = "careerlink"
 
 MONGO_URI = "mongodb://mymongodb:27017/"
@@ -47,6 +46,7 @@ def transform_and_ingest():
         .option("kafka.bootstrap.servers", KAFKA_SERVER) \
         .option("subscribe", KAFKA_TOPIC) \
         .option("startingOffsets", "latest") \
+        .option("consumer.config", "/tmp/client.properties") \
         .load()
 
     job_df = job_df.selectExpr("CAST(value AS STRING)") \
