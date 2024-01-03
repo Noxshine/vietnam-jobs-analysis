@@ -55,32 +55,65 @@ services:
     networks:
       - spark-network
 
-  zookeeper:
+  zookeeper-1:
     image: bitnami/zookeeper:3.9
-    container_name: zookeeper
-    hostname: zookeeper
+    container_name: zookeeper-1
+    hostname: zookeeper-1
     restart: always
     ports:
-      - "2181:2181"
+      - "22181:2181"
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     networks:
       - spark-network
 
-  kafka:
+  zookeeper-2:
+    image: bitnami/zookeeper:3.9
+    container_name: zookeeper-2
+    hostname: zookeeper-2
+    restart: always
+    ports:
+      - "32181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - spark-network
+
+  kafka-1:
     image: bitnami/kafka:3.5
-    container_name: kafka
-    hostname: kafka
+    container_name: kafka-1
+    hostname: kafka-1
     ports:
       - "29092:29092"
     environment:
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_BROKER_ID= 1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper-1:2181,zookeeper-2:2181
       - KAFKA_LISTENERS=INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29092
-      - KAFKA_ADVERTISED_LISTENERS=EXTERNAL://localhost:29092,INTERNAL://kafka:9092
+      - KAFKA_ADVERTISED_LISTENERS=EXTERNAL://localhost:29092,INTERNAL://kafka-1:9092
       - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
     depends_on:
-      - zookeeper
+      - zookeeper-1
+      - zookeeper-2
+    networks:
+      - spark-network
+
+  kafka-2:
+    image: bitnami/kafka:3.5
+    container_name: kafka-2
+    hostname: kafka-2
+    ports:
+      - "39092:39092"
+    environment:
+      - KAFKA_BROKER_ID= 2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper-1:2181,zookeeper-2:2181
+      - KAFKA_LISTENERS=INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:39092
+      - KAFKA_ADVERTISED_LISTENERS=EXTERNAL://localhost:39092,INTERNAL://kafka-2:9092
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
     networks:
       - spark-network
 
