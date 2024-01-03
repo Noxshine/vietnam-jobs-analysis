@@ -6,7 +6,7 @@ Buid a bigdata storage and processing system for analizing Vietnam job data from
 
 Data crawled from 2 websites [Careerbuilder](https://careerbuilder.vn/) and [Careerlink](https://www.careerlink.vn/) by Scrapy is written to a Kafka cluster. Then spark streaming job subcribe to these topic to read data and make processing. After that, data will be written to [Mongodb](https://www.mongodb.com/) container for further purposes. Kafka, Spark, Mongodb are created in containers running on Docker
 
-![Alt text](pipeline.png)
+![Alt text](image/pipeline.png)
 
 ## Installation
 
