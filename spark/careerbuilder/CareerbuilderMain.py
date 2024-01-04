@@ -27,7 +27,7 @@ from careerbuilder_schema import job_schema
 #     "org.mongodb.spark:mongo-spark-connector_2.12:3.0.2"
 # ]
 
-KAFKA_SERVER = "kafka:9092"
+KAFKA_SERVER = "kafka-1:9092"
 KAFKA_TOPIC = "careerbuilder"
 
 MONGO_URI = "mongodb://mymongodb:27017/"

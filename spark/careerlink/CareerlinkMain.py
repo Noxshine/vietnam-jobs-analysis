@@ -22,7 +22,7 @@ spark_version = '3.2.3'
 #     "org.mongodb.spark:mongo-spark-connector_2.12:3.0.2"
 # ]
 
-KAFKA_SERVER = "kafka:9092"
+KAFKA_SERVER = "kafka-2:9092"
 KAFKA_TOPIC = "careerlink"
 
 MONGO_URI = "mongodb://mymongodb:27017/"
