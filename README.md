@@ -31,22 +31,20 @@ For example: create topic careerbuilder in kafka-1 broker
 
 ```bash
 docker exec -it  kafka-1 /bin/sh kafka-1.sh --bootstrap-server localhost:9092 --topic careerbuilder --create --partitions 3 --replication-factor 1
-
 ```
 ## Running
 
 - Copy py. files of each job to a spark workder dir
 ```bash
-docker cp vietnam-jobs-analysis/spark/Careerbuilder    bigdataproject-spark-worker-1-1:opt/bitnami/spark
+docker cp vietnam-jobs-analysis/spark/Careerbuilder vietnam-jobs-analysis-spark-worker-1-1:opt/bitnami/spark
 
-docker cp vietnam-jobs-analysis/spark/Careerlink    bigdataproject-spark-worker-2-1:opt/bitnami/spark
+docker cp vietnam-jobs-analysis/spark/Careerlink vietnam-jobs-analysis-spark-worker-2-1:opt/bitnami/spark
 ```
 
 - Submmit job to spark cluster
 
 ```bash
 docker exec -it vietnam-jobs-analysis-spark-worker-1-1 /bin/bash spark-submit --master spark://spark-master:7077 --conf spark.jars.packages=org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,org.apache.kafka:kafka-clients:3.5.0,org.mongodb.spark:mongo-spark-connector_2.12:3.0.2 --conf spark.jars.ivy=/tmp/binami/pkg/cache --num-executors 2 --driver-memory 512m --executor-memory 512m --executor-cores 2 Careerbuilder/CareerbuilderMain.py
-
 ```
 In spark web UI there are job submitted is running
 
