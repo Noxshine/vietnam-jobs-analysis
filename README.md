@@ -62,7 +62,7 @@ scrapy crawl careerlink
 - Check Mongodb container for output
 
 ```bash
-docker exec -it mymongodb
+docker exec -it mymongodb bin/bash
 mongosh
 show dbs
 use job-analysis
